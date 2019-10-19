@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cost-model
+  labels:
+    app: cost-model
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cost-model
+    spec:
+      restartPolicy: Always
+      serviceAccountName: cost-model
+      containers:
+        - image: ajaytripathy/kubecost-cost-model:latest
+          name: cost-model
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "55M"
+          env:
+            - name: PROMETHEUS_SERVER_ENDPOINT
+              value: "http://prometheus-server.monitoring.svc.cluster.local" 
+#            - name: CLOUD_PROVIDER_API_KEY
+#              value: "AIzaSyD29bGxmHAVEOBYtgd8sYM2gM2ekfxQX4U" # The GCP Pricing API requires a key.
+          imagePullPolicy: Always
